@@ -142,10 +142,3 @@ class DoublyLinkedList:
                     highest_node = current_node
                 break
         return highest_node.value
-
-
-node = ListNode(1)
-linked_list = DoublyLinkedList(node)
-linked_list.add_to_tail(10)
-
-print(linked_list)
