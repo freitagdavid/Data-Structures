@@ -8,6 +8,9 @@ class ListNode:
         self.prev = prev
         self.next = next
 
+    def __repr__(self):
+        return f'<value: {self.value}>'
+
     """Wrap the given value in a ListNode and insert it
   after this node. Note that this node could already
   have a next node it is point to."""
@@ -51,6 +54,21 @@ class DoublyLinkedList:
     def __len__(self):
         return self.length
 
+    def __repr__(self):
+        return self.get_items()
+
+    def __str__(self):
+        return str(self.get_items())
+
+    def get_items(self):
+        current_node = self.head
+        return_list = []
+        while current_node.next:
+            return_list.append(current_node.value)
+            current_node = current_node.next
+        return_list.append(current_node.value)
+        return(return_list)
+
     def add_to_head(self, value):
         if not self.head:
             new_node = ListNode(value)
@@ -62,9 +80,13 @@ class DoublyLinkedList:
         self.length += 1
 
     def remove_from_head(self):
+        if self.head is self.tail:
+            self.tail = None
         current_node = self.head
         self.head = current_node.next
         current_node.delete()
+        self.length -= 1
+        return current_node.value
 
     def add_to_tail(self, value):
         if not self.head:
@@ -77,21 +99,35 @@ class DoublyLinkedList:
         self.length += 1
 
     def remove_from_tail(self):
+        if self.tail is self.head:
+            self.head = None
         current_node = self.tail
         self.tail = current_node.prev
         current_node.delete()
+        self.length -= 1
+        return current_node.value
 
     def move_to_front(self, node):
-        pass
+        if node is not self.head:
+            self.delete(node)
+            self.add_to_head(node.value)
 
     def move_to_end(self, node):
-        pass
+        if node is not self.tail:
+            self.delete(node)
+            self.add_to_tail(node.value)
 
     def delete(self, node):
         current_node = self.head
-        while current_node is not node:
-            current_node = current_node.next
-        current_node.delete()
+        if node is self.head:
+            self.remove_from_head()
+        elif node is self.tail:
+            self.remove_from_tail()
+        else:
+            while current_node is not node:
+                current_node = current_node.next
+                current_node.delete()
+                self.length -= 1
 
     def get_max(self):
         current_node = self.head
@@ -106,3 +142,10 @@ class DoublyLinkedList:
                     highest_node = current_node
                 break
         return highest_node.value
+
+
+node = ListNode(1)
+linked_list = DoublyLinkedList(node)
+linked_list.add_to_tail(10)
+
+print(linked_list)
