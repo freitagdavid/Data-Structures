@@ -47,18 +47,23 @@ class Heap:
         left = self._left(current)
         right = self._right(current)
         size = self.get_size()
+        current_exist = size > current
         left_exist = size > left
         right_exist = size > right
+        current_value = self.storage[current] if current_exist else None
+        left_value = self.storage[left] if left_exist else None
+        right_value = self.storage[right] if right_exist else None
         if left_exist and right_exist:
-            if (self.comparator(self.storage[left], self.storage[current]) and self.comparator(self.storage[left], self.storage[right])) or (self.storage[left] == self.storage[right]):
+            if (self.comparator(left_value, current_value) and self.comparator(left_value, right_value)) or (left_value == right_value):
                 self._swap(left, current)
                 self._sift_down(left)
-            if (self.comparator(self.storage[right], self.storage[current]) and self.comparator(self.storage[right], self.storage[left])) or (self.storage[right] == self.storage[left]):
+            if (self.comparator(left_value, current_value) and self.comparator(right_value, left_value)) or (right_value == left_value):
                 self._swap(right, current)
                 self._sift_down(right)
         if left_exist:
-            if self.comparator(self.storage[left], self.storage[current]):
+            # For some reason current_value isn't working here.
+            if self.comparator(left_value, self.storage[current]):
                 self._swap(left, current)
         if right_exist:
-            if self.comparator(self.storage[right], self.storage[current]):
+            if self.comparator(right_value, self.storage[current]):
                 self._swap(right, current)
