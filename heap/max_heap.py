@@ -1,6 +1,7 @@
 class Heap:
     def __init__(self):
         self.storage = []
+        self.steps = 0
 
     def insert(self, value):
         self.storage.append(value)
@@ -9,6 +10,7 @@ class Heap:
     def delete(self):
         return_value = self.storage[0]
         self._swap(0, len(self.storage) - 1)
+        del self.storage[-1]
         self._sift_down(0)
         return return_value
 
@@ -24,43 +26,32 @@ class Heap:
         return len(self.storage)
 
     def _parent(self, index):
-        parent_index = (index - 1) // 2
-        return self._return_node(parent_index)
+        return (index - 1) // 2
 
     def _left(self, index):
-        left_index = (index * 2) + 1
-        return self._return_node(left_index)
+        return (index * 2) + 1
 
     def _right(self, index):
-        right_index = (index * 2) + 2
-        return self._return_node(right_index)
-
-    def _return_node(self, index):
-        if index <= self.get_size() and not index < 0:
-            return {'index': index, 'value': self.storage[index]}
-        return None
+        return (index * 2) + 2
 
     def _bubble_up(self, index):
-        current_node = self._return_node(index)
-        parent = self._parent(index)
-        while parent['value'] < current_node['value']:
-            if current_node['index'] <= 0:
+        current_node = index
+        parent = self._parent(current_node)
+        while self.storage[parent] < self.storage[current_node]:
+            if current_node <= 0:
                 break
-            self._swap(current_node['index'], parent['index'])
-            current_node = self._parent(current_node['index'])
-            parent = self._parent(current_node['index'])
+            self._swap(current_node, parent)
+            current_node = self._parent(current_node)
+            parent = self._parent(current_node)
 
     def _sift_down(self, index):
-        current_index = index
-        current_node = self._return_node(current_index)
-        right_child = self._right(current_node['index'])
-        while current_node['value'] < right_child['value']:
-            if not right_child:
-                break
-            elif right_child['value'] > current_node['value']:
-                self._swap(right_child['index'], current_node['index'])
-                current_index = right_child['index']
-                current_node = self._return_node(current_index)
-                right_child = self._right(current_node['index'])
-            else:
-                break
+        current = index
+        left = self._left(current)
+        right = self._right(current)
+        if (self.get_size() > left) and (self.get_size() > right):
+            if self.storage[left] >= self.storage[current] and self.storage[left] >= self.storage[right]:
+                self._swap(left, current)
+                self._sift_down(left)
+            if self.storage[right] >= self.storage[current] and self.storage[right] >= self.storage[left]:
+                self._swap(right, current)
+                self._sift_down(right)
