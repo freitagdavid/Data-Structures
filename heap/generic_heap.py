@@ -61,12 +61,10 @@ class Heap:
     def _bubble_up(self, index):
         current_node = index
         parent = self._parent(current_node)
-        while self.comparator(self.storage[current_node], self.storage[parent]):
-            if current_node <= 0:
-                break
-            self._swap(current_node, parent)
-            current_node = parent
-            parent = self._parent(current_node)
+        if self.comparator(self.storage[current_node], self.storage[parent]):
+            if current_node > 0:
+                self._swap(current_node, parent)
+                self._bubble_up(parent)
 
     def _sift_down(self, index):
         current = index
