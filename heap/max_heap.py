@@ -41,20 +41,13 @@ class Heap:
             if current_node > 0:
                 self._swap(current_node, parent)
                 self._bubble_up(parent)
-        # current_node = index
-        # parent = self._parent(current_node)
-        # while self.storage[parent] < self.storage[current_node]:
-        #     if current_node <= 0:
-        #         break
-        #     self._swap(current_node, parent)
-        #     current_node = parent
-        #     parent = self._parent(current_node)
 
     def _sift_down(self, index):
         current = index
         left = self._left(current)
         right = self._right(current)
-        if (self.get_size() > left) and (self.get_size() > right):
+        size = self.get_size()
+        if (size > left) and (size > right):
             if self.storage[left] >= self.storage[current] and self.storage[left] >= self.storage[right]:
                 self._swap(left, current)
                 self._sift_down(left)
