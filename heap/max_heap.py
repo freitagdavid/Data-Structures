@@ -47,10 +47,18 @@ class Heap:
         left = self._left(current)
         right = self._right(current)
         size = self.get_size()
-        if (size > left) and (size > right):
-            if self.storage[left] >= self.storage[current] and self.storage[left] >= self.storage[right]:
+        left_exist = size > left
+        right_exist = size > right
+        if left_exist and right_exist:
+            if self.storage[left] > self.storage[current] and self.storage[left] >= self.storage[right]:
                 self._swap(left, current)
                 self._sift_down(left)
-            if self.storage[right] >= self.storage[current] and self.storage[right] >= self.storage[left]:
+            if self.storage[right] > self.storage[current] and self.storage[right] >= self.storage[left]:
                 self._swap(right, current)
                 self._sift_down(right)
+        if left_exist:
+            if self.storage[left] > self.storage[current]:
+                self._swap(left, current)
+        if right_exist:
+            if self.storage[right] > self.storage[current]:
+                self._swap(right, current)
